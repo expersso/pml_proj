@@ -9,3 +9,9 @@ pml_write_files = function(x){
 }
 
 pml_write_files(answers)
+
+# load("./data/gbm.RData")
+gbm
+answers <- predict(gbm, test_scaled)
+names(train_scaled)
+names(test_scaled)

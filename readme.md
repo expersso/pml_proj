@@ -1,9 +1,3 @@
----
-output:
-  html_document:
-    keep_md: yes
-    number_sections: yes
----
 ## Introduction
 
 ## Data cleaning and preparation
@@ -14,7 +8,8 @@ Although the dataset was already divided into a training and a testing set, the 
 
 As a final step in the preparation, all variables were scaled and centered, primarily to allow for easier plotting, but also since some ML algorithms need/prefer the data to be thus transformed.
 
-```{r preprocess, message=FALSE}
+
+```r
 library(dplyr)
 library(reshape2)
 library(ggplot2)
@@ -79,16 +74,22 @@ valid_scaled$user_name <- factor(valid$user_name)
 
 To get a feel for what the data looked like, a large number of graphs were produced. Figure X, for example, gives a first indication that the different classes are quite well-separated (we should thus expect a relatively high accuracy rate). 
 
-```{r qplot}
+
+```r
 qplot(data=train, roll_belt, pitch_belt, facets=user_name~classe)
 ```
 
-```{r corrplot}
+![plot of chunk qplot](./readme_files/figure-html/qplot.png) 
+
+
+```r
 library(corrplot)
 train2[-c(1,54)] %>% 
   cor %>% 
   corrplot(method = "color", tl.cex = 0.5)
 ```
+
+![plot of chunk corrplot](./readme_files/figure-html/corrplot.png) 
 
 ## Training a model
 
@@ -96,7 +97,8 @@ A large number of standard ML models were fit to the data. However, due to compu
 
 The gbm model was tuned using all three tuning parameters (number of trees, the interaction depth, and the shrinkage factor), and each model was evaluted using 10-fold cross-validation. 
 
-```{r train}
+
+```r
 # Train models
 trc <- trainControl("cv")
 
@@ -113,24 +115,66 @@ load(file = "gbm_model.RData")
 gbm_valid <- gbm
 ```
 
-The final model had a CV-estimated accuracy of `r round(max(gbm_valid$results$Accuracy), 3)` and the optimal tuning parameters were chosen as `r gbm_valid$bestTune$n.trees` trees, an interaction depth of `r gbm_valid$bestTune$interaction.depth`, and a shrinkage parameter of `r gbm_valid$bestTune$shrinkage`.
+The final model had a CV-estimated accuracy of 0.964 and the optimal tuning parameters were chosen as 150 trees, an interaction depth of 3, and a shrinkage parameter of 0.1.
 
 ## Evaluating the model
 
 To estimate the out-of-sample error rate of the model, predictions for the validation set for calculated and compared against the ground truth in a confusion matrix.
 
-```{r evaluate}
+
+```r
 (confMat <- confusionMatrix(predict(gbm_valid, valid_scaled[-53]), valid_scaled$classe))
 ```
 
+```
+## Loading required package: gbm
+## Loading required package: parallel
+## Loaded gbm 2.1
+```
+
+```
+## Confusion Matrix and Statistics
+## 
+##           Reference
+## Prediction    A    B    C    D    E
+##          A 1105   29    0    6    0
+##          B    7  680   19   14    8
+##          C    4   45  653   42   16
+##          D    0    2   11  578    9
+##          E    0    3    1    3  688
+## 
+## Overall Statistics
+##                                         
+##                Accuracy : 0.944         
+##                  95% CI : (0.937, 0.951)
+##     No Information Rate : 0.284         
+##     P-Value [Acc > NIR] : <2e-16        
+##                                         
+##                   Kappa : 0.929         
+##  Mcnemar's Test P-Value : NA            
+## 
+## Statistics by Class:
+## 
+##                      Class: A Class: B Class: C Class: D Class: E
+## Sensitivity             0.990    0.896    0.955    0.899    0.954
+## Specificity             0.988    0.985    0.967    0.993    0.998
+## Pos Pred Value          0.969    0.934    0.859    0.963    0.990
+## Neg Pred Value          0.996    0.975    0.990    0.980    0.990
+## Prevalence              0.284    0.193    0.174    0.164    0.184
+## Detection Rate          0.282    0.173    0.166    0.147    0.175
+## Detection Prevalence    0.291    0.186    0.194    0.153    0.177
+## Balanced Accuracy       0.989    0.940    0.961    0.946    0.976
+```
+
 The confusion matrix suggests that class B was the most problematic to predict. Still, the accuracy rate of 
-`r round(confMat$overall["Accuracy"], 3)` was promising. 
+0.944 was promising. 
 
 ## Making predictions
 
 Finally, a model identical to the one found above was fit to the entire training set (i.e. including the 3000 or so observations in the validation set not used to fit the previous model). The model was then used to predict the 20 classes in the original training set. 
 
-```{r final_preprocessing}
+
+```r
 scale_center_final <- preProcess(select(train, -classe, -user_name, -set), 
                            method = c("scale", "center"))
 train_scaled_final <- predict(scale_center_final, select(train, -classe, -user_name, -set))
@@ -142,7 +186,8 @@ test_scaled$problem_id <- test$problem_id
 test_scaled$user_name <- factor(test$user_name)
 ```
 
-```{r final_model}
+
+```r
 # Train model using optimal tuning params from cross-validated earlier model
 trc <- trainControl("cv")
 
@@ -157,7 +202,8 @@ gbmGrid_final <- data.frame(n.trees = gbm_valid$finalModel$n.trees,
 #              verbose = TRUE)
 ```
 
-```{r predictions}
+
+```r
 # source("write_answers.R")
 # answers <- predict(gbm_final, select(test_scaled, -problem_id))
 ```
