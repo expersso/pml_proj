@@ -1,3 +1,16 @@
+---
+title: "PLM project"
+output:
+  html_document:
+    fig_caption: yes
+    keep_md: yes
+---
+
+## Introduction
+
+## Data cleaning and preparation
+
+```{r preprocess}
 library(dplyr)
 library(reshape2)
 library(ggplot2)
@@ -58,7 +71,13 @@ test_scaled$classe <- test$problem_id
 
 train_scaled$classe <- factor(train_scaled$classe)
 valid_scaled$classe <- factor(valid_scaled$classe)
+```
 
+## Exploratory data analysis 
+
+## Training a model
+
+```{r train, eval=FALSE}
 # Train models
 trc <- trainControl("repeatedcv", number = 10, repeats = 2)
 
@@ -70,8 +89,16 @@ gbm <- train(classe ~ .,
              data = train_scaled, 
              method = "gbm", 
              trControl = trc, 
-             tuneGrid = gbmGrid)
+             tuneGrid = gbmGrid, 
+             verbose = FALSE)
+```
 
+## Evaluating model and making predictions
+
+```{r evaluate, eval=FALSE}
+gbm
 confusionMatrix(predict(gbm, valid_scaled), valid_scaled$classe)
-
 answers <- predict(gbm, test_scaled)
+```
+
+## Conclusion
