@@ -24,7 +24,7 @@ Although the dataset was already divided into a training and a testing set, the 
 As a final step in the preparation, all variables were scaled and centered, primarily to allow for easier plotting, but also since some ML algorithms need/prefer the data to be thus transformed.
 
 ```{r options, include=FALSE}
-knitr::opts_chunk$set(cache = TRUE)
+knitr::opts_chunk$set(cache = TRUE, warning = FALSE, message=FALSE)
 ```
 
 ```{r preprocess, message=FALSE}
