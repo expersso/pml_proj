@@ -180,11 +180,6 @@ To estimate the out-of-sample error rate of the model, predictions for the valid
 ```
 
 ```
-## Loading required package: gbm
-## Loaded gbm 2.1
-```
-
-```
 ## Confusion Matrix and Statistics
 ## 
 ##           Reference
@@ -218,7 +213,7 @@ To estimate the out-of-sample error rate of the model, predictions for the valid
 ## Balanced Accuracy       0.997    0.987    0.969    0.974    0.997
 ```
 
-The confusion matrix suggests that class D was the most problematic to predict. Still, the accuracy rate of 
+The confusion matrix suggests that classes C and D were the most problematic to predict. Still, the accuracy rate of 
 0.978 was promising. 
 
 ### Making predictions
