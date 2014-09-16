@@ -180,11 +180,6 @@ To estimate the out-of-sample error rate of the model, predictions for the valid
 ```
 
 ```
-## Loading required package: gbm
-## Loaded gbm 2.1
-```
-
-```
 ## Confusion Matrix and Statistics
 ## 
 ##           Reference
