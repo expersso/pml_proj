@@ -133,6 +133,39 @@ gbmGrid <- expand.grid(n.trees = seq(300, 500, 50),
 
 # save(gbm_valid, file = "gbm_valid.RData")
 load(file = "gbm_valid.RData")
+gbm_valid
+```
+
+```
+## Stochastic Gradient Boosting 
+## 
+## 15699 samples
+##    53 predictor
+##     5 classes: 'A', 'B', 'C', 'D', 'E' 
+## 
+## No pre-processing
+## Resampling: Cross-Validated (2 fold) 
+## 
+## Summary of sample sizes: 7849, 7850 
+## 
+## Resampling results across tuning parameters:
+## 
+##   interaction.depth  n.trees  Accuracy  Kappa  Accuracy SD  Kappa SD
+##   3                  300      1         1      2e-03        3e-03   
+##   3                  350      1         1      2e-03        3e-03   
+##   3                  400      1         1      1e-03        1e-03   
+##   3                  450      1         1      3e-04        3e-04   
+##   3                  500      1         1      9e-05        1e-04   
+##   4                  300      1         1      9e-05        1e-04   
+##   4                  350      1         1      5e-04        7e-04   
+##   4                  400      1         1      9e-04        1e-03   
+##   4                  450      1         1      1e-03        2e-03   
+##   4                  500      1         1      4e-04        5e-04   
+## 
+## Tuning parameter 'shrinkage' was held constant at a value of 0.1
+## Accuracy was used to select the optimal model using  the largest value.
+## The final values used for the model were n.trees = 500,
+##  interaction.depth = 4 and shrinkage = 0.1.
 ```
 
 The best model had a CV-estimated accuracy of 0.987 and the optimal tuning parameters were chosen as 500 trees, an interaction depth of 4, and a shrinkage parameter of 0.1.
@@ -222,19 +255,40 @@ gbmGrid_final <- data.frame(n.trees = gbm_valid$finalModel$n.trees,
 
 # save(gbm_final, file = "gbm_final.RData")
 load("gbm_final.RData")
+gbm_final
+```
+
+```
+## Stochastic Gradient Boosting 
+## 
+## 19622 samples
+##    53 predictor
+## 
+## No pre-processing
+## Resampling: None
 ```
 
 
 ```r
-# pml_write_files = function(x){
-#     n = length(x)
-#     for(i in 1:n){
-#       filename = paste0("./answers/problem_id_",i,".txt")
-#       write.table(x[i],file=filename,quote=FALSE,row.names=FALSE,col.names=FALSE)
-#     }
-# }
-# 
-# answers <- predict(gbm_final, select(test_scaled, -problem_id))
+# Function for creating files to submit answers
+pml_write_files = function(x){
+    n = length(x)
+    for(i in 1:n){
+      filename = paste0("./answers/problem_id_",i,".txt")
+      write.table(x[i],file=filename,quote=FALSE,row.names=FALSE,col.names=FALSE)
+    }
+}
+
+# Predicted answers
+(answers <- predict(gbm_final, select(test_scaled, -problem_id)))
+```
+
+```
+##  [1] B A B A A E D B A A B C B A E E A B B B
+## Levels: A B C D E
+```
+
+```r
 # pml_write_files(answers)
 ```
 

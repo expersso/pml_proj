@@ -133,6 +133,7 @@ gbmGrid <- expand.grid(n.trees = seq(300, 500, 50),
 
 # save(gbm_valid, file = "gbm_valid.RData")
 load(file = "gbm_valid.RData")
+gbm_valid
 ```
 
 The best model had a CV-estimated accuracy of `r round(max(gbm_valid$results$Accuracy), 3)` and the optimal tuning parameters were chosen as `r gbm_valid$bestTune$n.trees` trees, an interaction depth of `r gbm_valid$bestTune$interaction.depth`, and a shrinkage parameter of `r gbm_valid$bestTune$shrinkage`.
@@ -180,18 +181,21 @@ gbmGrid_final <- data.frame(n.trees = gbm_valid$finalModel$n.trees,
 
 # save(gbm_final, file = "gbm_final.RData")
 load("gbm_final.RData")
+gbm_final
 ```
 
 ```{r predictions}
-# pml_write_files = function(x){
-#     n = length(x)
-#     for(i in 1:n){
-#       filename = paste0("./answers/problem_id_",i,".txt")
-#       write.table(x[i],file=filename,quote=FALSE,row.names=FALSE,col.names=FALSE)
-#     }
-# }
-# 
-# answers <- predict(gbm_final, select(test_scaled, -problem_id))
+# Function for creating files to submit answers
+pml_write_files = function(x){
+    n = length(x)
+    for(i in 1:n){
+      filename = paste0("./answers/problem_id_",i,".txt")
+      write.table(x[i],file=filename,quote=FALSE,row.names=FALSE,col.names=FALSE)
+    }
+}
+
+# Predicted answers
+(answers <- predict(gbm_final, select(test_scaled, -problem_id)))
 # pml_write_files(answers)
 ```
 
