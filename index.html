@@ -234,15 +234,7 @@ registerDoParallel(cl)
 
 # Load data
 training &lt;- read.csv(&quot;./data/pml-training.csv&quot;, stringsAsFactors = FALSE) %&gt;% tbl_df
-</code></pre>
-
-<pre><code>## Warning: closing unused connection 6 (&lt;-LT-0124J-ECB.ecb01.ecb.de:11661)
-## Warning: closing unused connection 5 (&lt;-LT-0124J-ECB.ecb01.ecb.de:11661)
-## Warning: closing unused connection 4 (&lt;-LT-0124J-ECB.ecb01.ecb.de:11661)
-## Warning: closing unused connection 3 (&lt;-LT-0124J-ECB.ecb01.ecb.de:11661)
-</code></pre>
-
-<pre><code class="r">testing &lt;- read.csv(&quot;./data/pml-testing.csv&quot;, stringsAsFactors = FALSE) %&gt;% tbl_df
+testing &lt;- read.csv(&quot;./data/pml-testing.csv&quot;, stringsAsFactors = FALSE) %&gt;% tbl_df
 
 training$set &lt;- &quot;train&quot;
 testing$set &lt;- &quot;test&quot;
@@ -412,7 +404,7 @@ gbm_valid
 ## Balanced Accuracy       0.997    0.987    0.969    0.974    0.997
 </code></pre>
 
-<p>The confusion matrix suggests that class D was the most problematic to predict. Still, the accuracy rate of 
+<p>The confusion matrix suggests that classes C and D were the most problematic to predict. Still, the accuracy rate of 
 0.978 was promising. </p>
 
 <h3>Making predictions</h3>
