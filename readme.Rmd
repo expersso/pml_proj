@@ -146,7 +146,7 @@ To estimate the out-of-sample error rate of the model, predictions for the valid
 (confMat <- confusionMatrix(predict(gbm_valid, valid_scaled[-53]), valid_scaled$classe))
 ```
 
-The confusion matrix suggests that class D was the most problematic to predict. Still, the accuracy rate of 
+The confusion matrix suggests that classes C and D were the most problematic to predict. Still, the accuracy rate of 
 `r round(confMat$overall["Accuracy"], 3)` was promising. 
 
 ### Making predictions
